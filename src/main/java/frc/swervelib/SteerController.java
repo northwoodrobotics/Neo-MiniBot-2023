@@ -11,9 +11,15 @@ public interface SteerController {
 
     AbsoluteEncoder getAbsoluteEncoder();
 
+    double getAbsoluteAngle();
+
     double getStateAngle();
 
     double getOutputVoltage();
+
+    double getCurrentAmps();
+
+    double getDriveTempCelcius();
 
     void setSteerEncoder(double position, double velocity);
 }

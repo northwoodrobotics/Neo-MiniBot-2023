@@ -48,7 +48,7 @@ public class EnclosedEncoderModuleFactory<DriveConfiguration, SteerConfiguration
         private final EnclosedSteerController steerController;
 
         
-        private ShuffleboardTab tab = Shuffleboard.getTab("SwerveDt");
+       
         private NetworkTableEntry driveVoltageCmdEntry;
         private NetworkTableEntry driveVelocityCmdEntry;
         private NetworkTableEntry steerAngleCmdEntry;
@@ -93,6 +93,11 @@ public class EnclosedEncoderModuleFactory<DriveConfiguration, SteerConfiguration
         @Override
         public AbsoluteEncoder getAbsoluteEncoder() {
             return null;
+        }
+        @Override
+        public void updateInputs(swerveModuleIOInputs inputs){
+            inputs.drivePositionMeters = driveController.getStateMeters();
+             
         }
 
         

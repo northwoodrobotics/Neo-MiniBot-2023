@@ -17,5 +17,9 @@ public interface DriveController {
 
     double getOutputVoltage();
 
+    double getCurrentAmps();
+
+    double getDriveTempCelcius();
+
     void setDriveEncoder(double position, double velocity);
 }
