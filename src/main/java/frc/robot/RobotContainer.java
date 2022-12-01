@@ -81,7 +81,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driver.aButton.whenPressed(new CalibrateGyro(m_SwerveSubsystem));
+    driver.aButton.onTrue(new CalibrateGyro(m_SwerveSubsystem));
   }
 
   /**
