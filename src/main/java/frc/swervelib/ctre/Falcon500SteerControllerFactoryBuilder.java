@@ -227,5 +227,17 @@ public final class Falcon500SteerControllerFactoryBuilder {
         public double getOutputVoltage() {
             return motor.getMotorOutputVoltage();
         }
+        @Override 
+        public double getCurrentAmps(){
+            return motor.getStatorCurrent();
+        }
+        @Override 
+        public double getDriveTempCelcius(){
+            return motor.getTemperature();
+        }
+        @Override 
+        public double getAbsoluteAngle(){
+            return absoluteEncoder.getAbsoluteAngle();
+        }
     }
 }

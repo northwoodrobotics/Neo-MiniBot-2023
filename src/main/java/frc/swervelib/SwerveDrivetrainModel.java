@@ -82,6 +82,13 @@ public class SwerveDrivetrainModel {
         this.gyro = gyro;
         this.realModules = realModules;
 
+        this.positions = new SwerveModulePosition[]{
+            realModules.get(0).getPosition(),
+            realModules.get(1).getPosition(),
+            realModules.get(2).getPosition(),
+            realModules.get(3).getPosition(),
+
+        };
         
 
         if (RobotBase.isSimulation()) {

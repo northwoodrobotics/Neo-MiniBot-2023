@@ -190,5 +190,16 @@ public final class NeoSteerControllerFactoryBuilder {
         public double getOutputVoltage() {
             return motor.getBusVoltage() * motor.getAppliedOutput();
         }
+        @Override 
+        public double getCurrentAmps(){
+            return motor.getOutputCurrent();
+        }
+        public double getDriveTempCelcius(){
+            return motor.getMotorTemperature();
+        }
+        @Override 
+        public double getAbsoluteAngle(){
+            return absoluteEncoder.getAbsoluteAngle();
+        }
     }
 }

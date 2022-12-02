@@ -94,6 +94,11 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
         public AbsoluteEncoder getAbsoluteEncoder() {
             return steerController.getAbsoluteEncoder();
         }
+        @Override 
+        public void updateInputs(swerveModuleIOInputs inputs){
+
+            
+        }
 
         
         @Override

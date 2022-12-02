@@ -173,5 +173,13 @@ public final class Falcon500DriveControllerFactoryBuilder {
         public double getOutputVoltage() {
             return motor.getMotorOutputVoltage();
         }
+        @Override 
+        public double getCurrentAmps(){
+            return motor.getStatorCurrent();
+        }
+        @Override 
+        public double getDriveTempCelcius(){
+            return motor.getTemperature();
+        }
     }
 }
