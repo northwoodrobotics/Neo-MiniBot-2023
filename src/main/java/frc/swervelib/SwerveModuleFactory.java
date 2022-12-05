@@ -94,6 +94,23 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
         public AbsoluteEncoder getAbsoluteEncoder() {
             return steerController.getAbsoluteEncoder();
         }
+        @Override
+        public void updateInputs(swerveModuleIOInputs inputs){
+            inputs.drivePositionMeters = driveController.getStateMeters();
+            inputs.driveVelocity = driveController.getStateVelocity();
+            inputs.driveAppliedVolts = driveController.getOutputVoltage();
+            inputs.driveCurrentAmps = new double[]{driveController.getCurrentAmps()};
+            inputs.driveTempCelcius = new double[]{driveController.getDriveTempCelcius()};
+
+            inputs.steerAbsoluteDeg = steerController.getAbsoluteAngle();
+            inputs.steerAngleDeg = steerController.getReferenceAngle();
+            inputs.steerAppliedVolts = steerController.getOutputVoltage();
+            inputs.steerCurrentAmps = new double[]{steerController.getCurrentAmps()};
+            inputs.steerTempCelcius = new double[]{steerController.getDriveTempCelcius()};
+
+
+        }
+        
 
         
         @Override

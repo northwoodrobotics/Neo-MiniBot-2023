@@ -13,10 +13,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.ArrayList;
 
+import org.littletonrobotics.junction.Logger;
+
 public class SwerveSubsystem extends SubsystemBase {
   private SwerveModuleState[] states;
   private SwerveModulePosition[] positions;
-
+ 
   private ArrayList<SwerveModule> modules = new ArrayList<SwerveModule>(QuadSwerveSim.NUM_MODULES);
   public SwerveDrivetrainModel dt;
 
@@ -27,6 +29,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+
     states = dt.getSwerveModuleStates();
     dt.setModulePositions();
     positions = dt.getModulePositions();

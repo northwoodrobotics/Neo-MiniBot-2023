@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -65,6 +67,9 @@ public class RobotContainer {
         () -> driver.rightStick.getX() * Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
 
         ShowInputs();
+
+    Logger.getInstance().recordOutput("Pose Estimator", m_SwerveSubsystem.dt.getPose());
+    Logger.getInstance().recordOutput("SwerveModuleStates", m_SwerveSubsystem.dt.getSwerveModuleStates());
 
     // Configure the button bindings
     configureButtonBindings();
