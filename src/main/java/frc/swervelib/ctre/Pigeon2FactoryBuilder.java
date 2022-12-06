@@ -37,7 +37,8 @@ public class Pigeon2FactoryBuilder {
      
         @Override
         public void zeroGyroscope(double angle) {
-            gyroOffset = angle - getGyroHeading().getDegrees();
+            gyroOffset = angle - getGyroHeading().getDegrees(); 
+            this.pigeon.setYaw(angle);
             
         }
         @Override
