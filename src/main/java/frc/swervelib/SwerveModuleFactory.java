@@ -146,9 +146,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
             driveController.setReferenceVoltage(driveVoltage);
             steerController.setReferenceAngle(steerAngle);
 
-            this.driveVoltageCmdEntry.setDouble(driveVoltage);
-            this.steerAngleCmdEntry.setDouble(steerAngle*180/Math.PI);
-        }
+                    }
         @Override
         public SwerveModulePosition getPosition(){
             return new SwerveModulePosition(driveController.getStateMeters(), Rotation2d.fromRadians(getSteerAngle()));
@@ -188,8 +186,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
             steerController.setReferenceAngle(steerAngle);
             
 
-            this.driveVelocityCmdEntry.setDouble(driveVelocity);
-            this.steerAngleCmdEntry.setDouble(steerAngle*180/Math.PI);
+           
         }
     }
 }

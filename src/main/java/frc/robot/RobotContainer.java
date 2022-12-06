@@ -6,6 +6,7 @@ package frc.robot;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -52,6 +53,9 @@ public class RobotContainer {
   public static ExpCurve throttleCurve = new ExpCurve(1.2, 0, 1.0, 0.15);
   public static ExpCurve steeringCurve = new ExpCurve(1.2, 0, -1.0, 0.15);
 
+  public static SlewRateLimiter xLimiter = new SlewRateLimiter(1.5);
+  public static SlewRateLimiter yLimiter = new SlewRateLimiter(1.5);
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -62,14 +66,14 @@ public class RobotContainer {
     m_SwerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
 
     m_SwerveSubsystem.setDefaultCommand(new TeleopDriveCommand(m_SwerveSubsystem,
-        () -> -getDriveY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS,
-        () -> -getDriveX() * Constants.DriveConstants.MAX_STRAFE_SPEED_MPS,
+        () -> yLimiter.calculate(driver.leftStick.getY()),
+        () -> xLimiter.calculate(driver.leftStick.getX()),
         () -> driver.rightStick.getX() * Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
 
         ShowInputs();
 
     Logger.getInstance().recordOutput("Pose Estimator", m_SwerveSubsystem.dt.getPose());
-    Logger.getInstance().recordOutput("SwerveModuleStates", m_SwerveSubsystem.dt.getSwerveModuleStates());
+
 
     // Configure the button bindings
     configureButtonBindings();
@@ -113,8 +117,8 @@ public class RobotContainer {
     return value;
   }
   public void ShowInputs(){
-    master.addNumber("X Command", ()-> -getDriveX()*Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
-    master.addNumber("Y Command", () -> -getDriveY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
+    master.addNumber("X Command", ()-> -xLimiter.calculate(driver.leftStick.getX())*Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
+    master.addNumber("Y Command", () -> -yLimiter.calculate(driver.leftStick.getY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
     master.addNumber("X Old Command", ()-> -getDriveX()*Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS* Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
     master.addNumber("Y Old Command", () -> -getDriveY() * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS*Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
     

@@ -18,6 +18,7 @@ import org.littletonrobotics.junction.Logger;
 public class SwerveSubsystem extends SubsystemBase {
   private SwerveModuleState[] states;
   private SwerveModulePosition[] positions;
+  private swerveModuleIOInputsAutoLogged[] inputs;
  
   private ArrayList<SwerveModule> modules = new ArrayList<SwerveModule>(QuadSwerveSim.NUM_MODULES);
   public SwerveDrivetrainModel dt;
@@ -61,6 +62,8 @@ public class SwerveSubsystem extends SubsystemBase {
       
       
       );
+     
+
     }
 
     dt.updateTelemetry();

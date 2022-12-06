@@ -5,17 +5,23 @@
     }
   },
   "NetworkTables": {
-    "Transitory Values": {
+    "Persistent Values": {
       "open": false
+    },
+    "Retained Values": {
+      "open": false
+    },
+    "retained": {
+      "SmartDashboard": {
+        "open": true
+      }
     },
     "transitory": {
       "Shuffleboard": {
-        ".metadata": {
-          "open": true
-        },
         ".recording": {
           "open": true
-        }
+        },
+        "open": true
       }
     }
   },
