@@ -12,6 +12,7 @@ public class GetTagPose extends CommandBase{
     
     public GetTagPose(PhotonCams cameras){
         this.m_cameras = cameras;
+        posetimer = new Timer();
      
     }
 
@@ -20,18 +21,18 @@ public class GetTagPose extends CommandBase{
         posetimer.reset();
         posetimer.start();
        
-       SmartDashboard.getNumber("PreVisonPoseX", m_cameras.getLastTagLocation().getX());
-       SmartDashboard.getNumber("PreVisonPoseY", m_cameras.getLastTagLocation().getY());
-       SmartDashboard.getNumber("PreVisonPoseRot", m_cameras.getLastTagLocation().getRotation().getDegrees());
+       SmartDashboard.putNumber("PreVisonPoseX", m_cameras.getLastTagLocation().getX());
+       SmartDashboard.putNumber("PreVisonPoseY", m_cameras.getLastTagLocation().getY());
+       SmartDashboard.putNumber("PreVisonPoseRot", m_cameras.getLastTagLocation().getRotation().getDegrees());
     }
     public void execute(){
         m_cameras.getTagLocation(RobotContainer.m_SwerveSubsystem.dt.getPose());
     }
     public void end(boolean interrupted){
          
-       SmartDashboard.getNumber("PostVisionPoseX", m_cameras.getLastTagLocation().getX());
-       SmartDashboard.getNumber("PostVisonPoseY", m_cameras.getLastTagLocation().getY());
-       SmartDashboard.getNumber("PostVisonPoseRot", m_cameras.getLastTagLocation().getRotation().getDegrees());
+       SmartDashboard.putNumber("PostVisionPoseX", m_cameras.getLastTagLocation().getX());
+       SmartDashboard.putNumber("PostVisonPoseY", m_cameras.getLastTagLocation().getY());
+       SmartDashboard.putNumber ("PostVisonPoseRot", m_cameras.getLastTagLocation().getRotation().getDegrees());
     }
        @Override
     public boolean isFinished(){
