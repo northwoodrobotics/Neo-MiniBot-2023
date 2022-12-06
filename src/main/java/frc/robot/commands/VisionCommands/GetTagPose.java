@@ -1,5 +1,6 @@
 package frc.robot.commands.VisionCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -7,7 +8,8 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.PhotonCams;
 
 public class GetTagPose extends CommandBase{
-    private final PhotonCams m_cameras; 
+    private final PhotonCams m_cameras;
+    private Pose2d TagPose; 
     private Timer posetimer;
     
     public GetTagPose(PhotonCams cameras){
@@ -24,15 +26,17 @@ public class GetTagPose extends CommandBase{
        SmartDashboard.putNumber("PreVisonPoseX", m_cameras.getLastTagLocation().getX());
        SmartDashboard.putNumber("PreVisonPoseY", m_cameras.getLastTagLocation().getY());
        SmartDashboard.putNumber("PreVisonPoseRot", m_cameras.getLastTagLocation().getRotation().getDegrees());
+       SmartDashboard.putNumber("TagID", (double)m_cameras.getTagID());
     }
     public void execute(){
-        m_cameras.getTagLocation(RobotContainer.m_SwerveSubsystem.dt.getPose());
+        this.TagPose = m_cameras.getTagLocation(RobotContainer.m_SwerveSubsystem.dt.getPose());
     }
     public void end(boolean interrupted){
          
-       SmartDashboard.putNumber("PostVisionPoseX", m_cameras.getLastTagLocation().getX());
-       SmartDashboard.putNumber("PostVisonPoseY", m_cameras.getLastTagLocation().getY());
-       SmartDashboard.putNumber ("PostVisonPoseRot", m_cameras.getLastTagLocation().getRotation().getDegrees());
+       SmartDashboard.putNumber("PostVisionPoseX", TagPose.getX());
+       SmartDashboard.putNumber("PostVisonPoseY", TagPose.getY());
+       SmartDashboard.putNumber ("PostVisonPoseRot", TagPose.getRotation().getDegrees());
+       
     }
        @Override
     public boolean isFinished(){

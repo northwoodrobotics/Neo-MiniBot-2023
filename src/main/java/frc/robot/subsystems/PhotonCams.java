@@ -53,6 +53,13 @@ public class PhotonCams extends SubsystemBase{
     public Pose2d getLastTagLocation(){
         return tagLocation;
     }
+    public int getTagID(){
+        var res = visionCam.getLatestResult();
+        if(res.hasTargets()){
+          return  res.getBestTarget().getFiducialId();
+        }else return 0;
+    }
+    
 
 
 
