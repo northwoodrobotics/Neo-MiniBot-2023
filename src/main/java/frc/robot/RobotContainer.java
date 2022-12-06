@@ -12,11 +12,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.ExternalLib.PoofLib.geometry.Pose2d;
 import frc.ExternalLib.SpectrumLib.gamepads.SpectrumXbox;
 import frc.ExternalLib.SpectrumLib.gamepads.mapping.ExpCurve;
 import frc.robot.commands.DriveCommands.CalibrateGyro;
 import frc.robot.commands.DriveCommands.TeleopDriveCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.PhotonCams;
 import frc.swervelib.SwerveDrivetrainModel;
 import frc.swervelib.SwerveSubsystem;
 
@@ -33,6 +35,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static SwerveDrivetrainModel dt;
   public static SwerveSubsystem m_SwerveSubsystem;
+  public static PhotonCams m_cams;
   /**
    * SpectrumXbox(0, 0.1, 0.1); is an xbox controller with baked in buttons,
    * triggers, and other logic already there.
@@ -41,6 +44,7 @@ public class RobotContainer {
    **/
   public static SpectrumXbox driver = new SpectrumXbox(0, 0.1, 0.2);
   private static ShuffleboardTab master = Shuffleboard.getTab("master");
+
 
   /**
    * Exp Curves are exponential curves, think parabolas. the first value controls
@@ -55,6 +59,7 @@ public class RobotContainer {
 
   public static SlewRateLimiter xLimiter = new SlewRateLimiter(1.5);
   public static SlewRateLimiter yLimiter = new SlewRateLimiter(1.5);
+  public Pose2d TagPose = new Pose2d();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -64,6 +69,7 @@ public class RobotContainer {
     // tracking, path following, and a couple of other tricks.
     dt = DrivetrainSubsystem.createSwerveModel();
     m_SwerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
+    m_cams = new PhotonCams();
 
     m_SwerveSubsystem.setDefaultCommand(new TeleopDriveCommand(m_SwerveSubsystem,
         () -> yLimiter.calculate(driver.leftStick.getY()),
@@ -91,6 +97,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     driver.aButton.onTrue(new CalibrateGyro(m_SwerveSubsystem));
+    
+
   }
 
   /**
@@ -127,11 +135,12 @@ public class RobotContainer {
     
     master.addNumber("GyroReading", () -> dt.getGyroscopeRotation().getDegrees());
     
-    
+
     master.addNumber("PoseX", ()-> m_SwerveSubsystem.dt.getPose().getX());
     master.addNumber("PoseY", ()-> m_SwerveSubsystem.dt.getPose().getY());
     master.addNumber("PoseRotation", ()-> m_SwerveSubsystem.dt.getPose().getRotation().getDegrees());
-
+    master.addNumber("TagX", ()-> m_cams.getTagLocation(m_SwerveSubsystem.dt.getPose()).getX());
+    master.addNumber("Tagy", ()-> m_cams.getTagLocation(m_SwerveSubsystem.dt.getPose()).getY());
    
 
     
