@@ -8,19 +8,19 @@
     "Persistent Values": {
       "open": false
     },
-    "Retained Values": {
-      "open": false
-    },
     "retained": {
       "SmartDashboard": {
         "open": true
       }
     },
     "transitory": {
-      "Shuffleboard": {
-        ".recording": {
+      "LiveWindow": {
+        ".status": {
           "open": true
         },
+        "open": true
+      },
+      "Shuffleboard": {
         "open": true
       }
     }

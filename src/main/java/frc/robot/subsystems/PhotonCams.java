@@ -17,6 +17,7 @@ public class PhotonCams extends SubsystemBase{
     private static int targetTag = 3;
     private static Transform2d robotToCam = new Transform2d(new Translation2d(Units.inchesToMeters(10), Units.inchesToMeters(5)), new Rotation2d(0.0));
     private static Pose2d tagToGoal = new Pose2d(1, 0, new Rotation2d(180));
+    private Transform2d transform;
     private Pose2d tagLocation = new Pose2d();
     public PhotonCams(){
         visionCam.setDriverMode(false);
@@ -31,7 +32,7 @@ public class PhotonCams extends SubsystemBase{
             var targetOpt = res.getBestTarget().getFiducialId();
             if(targetOpt == targetTag){
                 var camToTarget = res.getBestTarget().getBestCameraToTarget();
-                var transform = new Transform2d(
+                 transform = new Transform2d(
                     camToTarget.getTranslation().toTranslation2d(), 
                     camToTarget.getRotation().toRotation2d());
                 var cameraPose = pose2d.transformBy(robotToCam.inverse());
@@ -48,6 +49,15 @@ public class PhotonCams extends SubsystemBase{
         } 
         else 
     return tagLocation;
+    }
+    public Pose2d getLastTagLocation(){
+        return tagLocation;
+    }
+
+
+    @Override 
+    public void periodic(){
+        
     }
 
 }

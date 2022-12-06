@@ -12,11 +12,12 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.ExternalLib.PoofLib.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import frc.ExternalLib.SpectrumLib.gamepads.SpectrumXbox;
 import frc.ExternalLib.SpectrumLib.gamepads.mapping.ExpCurve;
 import frc.robot.commands.DriveCommands.CalibrateGyro;
 import frc.robot.commands.DriveCommands.TeleopDriveCommand;
+import frc.robot.commands.VisionCommands.GetTagPose;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PhotonCams;
 import frc.swervelib.SwerveDrivetrainModel;
@@ -36,6 +37,7 @@ public class RobotContainer {
   public static SwerveDrivetrainModel dt;
   public static SwerveSubsystem m_SwerveSubsystem;
   public static PhotonCams m_cams;
+
   /**
    * SpectrumXbox(0, 0.1, 0.1); is an xbox controller with baked in buttons,
    * triggers, and other logic already there.
@@ -57,9 +59,20 @@ public class RobotContainer {
   public static ExpCurve throttleCurve = new ExpCurve(1.2, 0, 1.0, 0.15);
   public static ExpCurve steeringCurve = new ExpCurve(1.2, 0, -1.0, 0.15);
 
+
+  /**
+   * SlewRateLimiters are simple code classes that limit how quickly a value is allowed to change, thus preventing oversteering.
+   * these were critical on the Swerve Minibot, due to the non existent torque it had, preventing fast acceleration. 
+   * 
+   */
   public static SlewRateLimiter xLimiter = new SlewRateLimiter(1.5);
   public static SlewRateLimiter yLimiter = new SlewRateLimiter(1.5);
-  public Pose2d TagPose = new Pose2d();
+
+  /**
+   * This Pose2d Object is the field realtive location of a vision target,
+   *  an 36h11 family AprilTag, specifically tag #3 
+   */
+  public Pose2d TagPose;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -70,6 +83,8 @@ public class RobotContainer {
     dt = DrivetrainSubsystem.createSwerveModel();
     m_SwerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
     m_cams = new PhotonCams();
+    TagPose = new Pose2d();
+    
 
     m_SwerveSubsystem.setDefaultCommand(new TeleopDriveCommand(m_SwerveSubsystem,
         () -> yLimiter.calculate(driver.leftStick.getY()),
@@ -97,6 +112,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     driver.aButton.whileTrue(new CalibrateGyro(m_SwerveSubsystem));
+    driver.bButton.onTrue(new GetTagPose(m_cams));
+
     
 
   }
