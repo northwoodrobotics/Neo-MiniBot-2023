@@ -74,7 +74,7 @@ public class RobotContainer {
     m_SwerveSubsystem.setDefaultCommand(new TeleopDriveCommand(m_SwerveSubsystem,
         () -> yLimiter.calculate(driver.leftStick.getY()),
         () -> xLimiter.calculate(driver.leftStick.getX()),
-        () -> driver.rightStick.getX() * Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
+        () -> -driver.rightStick.getX() * Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
 
         ShowInputs();
 

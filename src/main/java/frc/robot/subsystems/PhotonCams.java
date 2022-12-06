@@ -43,11 +43,11 @@ public class PhotonCams extends SubsystemBase{
                
 
             }else 
-            return null;
+            return tagLocation;
             
         } 
         else 
-    return null;
+    return tagLocation;
     }
-    
+
 }
