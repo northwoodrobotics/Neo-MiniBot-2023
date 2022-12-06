@@ -15,5 +15,13 @@ public class CalibrateGyro extends CommandBase {
   public void execute() {
     m_swerveSubsystem.dt.zeroGyroscope();
   }
+  @Override 
+  public void end(boolean interrupted){
+
+  }
+  @Override
+  public boolean isFinished(){
+    return true;
+  }
 
 }
