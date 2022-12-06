@@ -134,7 +134,7 @@ public final class Constants {
         // software
         // Tape Measure out 1 Meter and Drive back and forth on it, change this number
         // until odometry says 0-1m.
-        public static final double TractionConstant = Units.feetToMeters(14.65);
+        public static final double TractionConstant = Units.feetToMeters(19.00);
 
         // Constraint for the motion profilied robot angle controller
         public static final TrapezoidProfile.Constraints THETACONTROLLERCONSTRAINTS = new TrapezoidProfile.Constraints(
