@@ -15,11 +15,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.net.PortForwarder;
 import frc.ExternalLib.SpectrumLib.gamepads.SpectrumXbox;
 import frc.ExternalLib.SpectrumLib.gamepads.mapping.ExpCurve;
 import frc.robot.commands.ActionCommands.DriveToTag;
+import frc.robot.commands.DriveCommands.AutoDrive;
 import frc.robot.commands.DriveCommands.CalibrateGyro;
 import frc.robot.commands.DriveCommands.TeleopDriveCommand;
 import frc.robot.commands.VisionCommands.GetTagPose;
@@ -104,7 +106,7 @@ public class RobotContainer {
 
         ShowInputs();
 
-    Logger.getInstance().recordOutput("Pose Estimator", m_SwerveSubsystem.dt.getPose());
+    Logger.getInstance().recordOutput("Pose Estimator", new Pose2d(m_SwerveSubsystem.dt.getPose().getTranslation(), m_SwerveSubsystem.dt.getGyroscopeRotation()));
 
 
     // Configure the button bindings
@@ -123,7 +125,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     driver.aButton.whileTrue(new CalibrateGyro(m_SwerveSubsystem));
-    driver.bButton.whileTrue(new DriveToTag(m_SwerveSubsystem,m_cams));
+    driver.bButton.whileTrue(new SequentialCommandGroup(new DriveToTag(m_SwerveSubsystem, m_cams), new AutoDrive(m_SwerveSubsystem, TargetTrajectory)));
 
     
 

@@ -31,12 +31,17 @@ public class DriveToTag extends CommandBase{
     }
     @Override
     public void initialize(){
+        // gets location of the target relative to the robot's internal position
         TagPose = m_Cameras.getTagLocation(m_Swerve.dt.getPose());
+
+        // calculates a 2d vector in between the two tags
         robotToTag = new Transform2d(m_Swerve.dt.getPose(), TagPose);
 
-
+        // feeds all data into path generation software
         Route2Tag = PathPlanner.generatePath(
+            // these are acceleration and velocity constraints, in m/s and m/s squared
             new PathConstraints(6, 4), 
+            // PathPoints have 3 values, the cordinates of the intial point, the heading of the desired vector, and the "holonomic rotation" of the robot
             new PathPoint(m_Swerve.dt.getPose().getTranslation(),robotToTag.getRotation(),m_Swerve.dt.getGyroscopeRotation() ), 
             new PathPoint(TagPose.getTranslation(), robotToTag.getRotation(), TagPose.getRotation())
             );

@@ -151,20 +151,20 @@ public final class Constants {
         public static final double Climb1D = 0.0;
         public static final double Climb1I = 0.0;
         public static final double Climb1F = 0.045;
-        public static final double Climb1MotionAccel = 8192; 
-        public static final double Climb1MotionVelocity =8192; 
+        public static final double Climb1MotionAccel = 8192.0; 
+        public static final double Climb1MotionVelocity =8192.0; 
         public static final double Climb2P = 0.5;
         public static final double Climb2F = 0.045;
         public static final double Climb2D = 0.0;
         public static final double Climb2I = 0.0;
-        public static final double Climb2MotionAccel = 8192; 
-        public static final double Climb2MotionVelocity =8192; 
+        public static final double Climb2MotionAccel = 8192.0; 
+        public static final double Climb2MotionVelocity =8192.0; 
         public static final float Climb1SoftForward = 0;
         public static final float Climb1SoftReverse = 0;
         public static final float Climb2SoftForward = 0;
         public static final float Climb2SoftReverse = 0;
-        public static final double Climb1GearRatio = 20;
-        public static final double Climb2GearRatio = 20; 
+        public static final double Climb1GearRatio = 20.0;
+        public static final double Climb2GearRatio = 20.0; 
     }
 
 }
