@@ -5,6 +5,9 @@
 package frc.robot;
 
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.PhotonCamera;
+
+import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -13,8 +16,10 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.net.PortForwarder;
 import frc.ExternalLib.SpectrumLib.gamepads.SpectrumXbox;
 import frc.ExternalLib.SpectrumLib.gamepads.mapping.ExpCurve;
+import frc.robot.commands.ActionCommands.DriveToTag;
 import frc.robot.commands.DriveCommands.CalibrateGyro;
 import frc.robot.commands.DriveCommands.TeleopDriveCommand;
 import frc.robot.commands.VisionCommands.GetTagPose;
@@ -37,6 +42,7 @@ public class RobotContainer {
   public static SwerveDrivetrainModel dt;
   public static SwerveSubsystem m_SwerveSubsystem;
   public static PhotonCams m_cams;
+  public static PhotonCamera camera;
 
   /**
    * SpectrumXbox(0, 0.1, 0.1); is an xbox controller with baked in buttons,
@@ -74,6 +80,9 @@ public class RobotContainer {
    */
   public Pose2d TagPose;
 
+  public static PathPlannerTrajectory TargetTrajectory;
+
+ 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -82,8 +91,10 @@ public class RobotContainer {
     // tracking, path following, and a couple of other tricks.
     dt = DrivetrainSubsystem.createSwerveModel();
     m_SwerveSubsystem = DrivetrainSubsystem.createSwerveSubsystem(dt);
-    m_cams = new PhotonCams();
+    camera = new PhotonCamera("gloworm");
+    m_cams = new PhotonCams(camera);
     TagPose = new Pose2d();
+    PortForwarder.add(5800, "glowworm.local", 5800);
     
 
     m_SwerveSubsystem.setDefaultCommand(new TeleopDriveCommand(m_SwerveSubsystem,
@@ -112,7 +123,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     driver.aButton.whileTrue(new CalibrateGyro(m_SwerveSubsystem));
-    driver.bButton.onTrue(new GetTagPose(m_cams));
+    driver.bButton.whileTrue(new DriveToTag(m_SwerveSubsystem,m_cams));
 
     
 
@@ -142,6 +153,7 @@ public class RobotContainer {
     return value;
   }
   public void ShowInputs(){
+    master.addNumber("TagID", ()-> m_cams.getTagID());
     master.addNumber("X Command", ()-> -xLimiter.calculate(driver.leftStick.getX())*Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
     master.addNumber("Y Command", () -> -yLimiter.calculate(driver.leftStick.getY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
     master.addNumber("X Old Command", ()-> -getDriveX()*Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS* Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
@@ -158,6 +170,7 @@ public class RobotContainer {
     master.addNumber("PoseRotation", ()-> m_SwerveSubsystem.dt.getPose().getRotation().getDegrees());
     master.addNumber("TagX", ()-> m_cams.getTagLocation(m_SwerveSubsystem.dt.getPose()).getX());
     master.addNumber("Tagy", ()-> m_cams.getTagLocation(m_SwerveSubsystem.dt.getPose()).getY());
+    master.addBoolean("hasTag", ()->m_cams.hasTargets());
    
 
     

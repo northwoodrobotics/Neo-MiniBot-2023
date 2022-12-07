@@ -13,13 +13,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import frc.ExternalLib.SpectrumLib.drivers.PhotonColorSensors;
 
 public class PhotonCams extends SubsystemBase{
-    private final PhotonCamera visionCam = new PhotonCamera("glowworm");
+    private final PhotonCamera visionCam;
     private static int targetTag = 3;
     private static Transform2d robotToCam = new Transform2d(new Translation2d(Units.inchesToMeters(10), Units.inchesToMeters(5)), new Rotation2d(0.0));
     private static Pose2d tagToGoal = new Pose2d(1, 0, new Rotation2d(180));
     private Transform2d transform;
     private Pose2d tagLocation = new Pose2d();
-    public PhotonCams(){
+    public PhotonCams(PhotonCamera camera){
+        this.visionCam = camera;
         visionCam.setDriverMode(false);
         visionCam.setLED(VisionLEDMode.kOff);
 
@@ -58,6 +59,10 @@ public class PhotonCams extends SubsystemBase{
         if(res.hasTargets()){
           return  res.getBestTarget().getFiducialId();
         }else return 0;
+    }
+    public boolean hasTargets(){
+        var res = visionCam.getLatestResult();
+        return res.hasTargets();
     }
     
 
