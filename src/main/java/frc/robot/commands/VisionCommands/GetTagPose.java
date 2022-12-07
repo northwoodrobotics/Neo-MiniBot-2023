@@ -26,7 +26,7 @@ public class GetTagPose extends CommandBase{
        SmartDashboard.putNumber("PreVisonPoseX", m_cameras.getLastTagLocation().getX());
        SmartDashboard.putNumber("PreVisonPoseY", m_cameras.getLastTagLocation().getY());
        SmartDashboard.putNumber("PreVisonPoseRot", m_cameras.getLastTagLocation().getRotation().getDegrees());
-       SmartDashboard.putNumber("TagID", (double)m_cameras.getTagID());
+
     }
     public void execute(){
         this.TagPose = m_cameras.getTagLocation(RobotContainer.m_SwerveSubsystem.dt.getPose());
