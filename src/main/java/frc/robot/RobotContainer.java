@@ -96,6 +96,7 @@ public class RobotContainer {
     camera = new PhotonCamera("gloworm");
     m_cams = new PhotonCams(camera);
     TagPose = new Pose2d();
+    TargetTrajectory = new PathPlannerTrajectory();
     PortForwarder.add(5800, "glowworm.local", 5800);
     
 
@@ -125,7 +126,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     driver.aButton.whileTrue(new CalibrateGyro(m_SwerveSubsystem));
-    driver.bButton.whileTrue(new SequentialCommandGroup(new DriveToTag(m_SwerveSubsystem, m_cams), new AutoDrive(m_SwerveSubsystem, TargetTrajectory)));
+    driver.bButton.onTrue(new AutoDrive(m_SwerveSubsystem, m_cams.calculateTrajectorToTag(m_SwerveSubsystem.dt.getPose())));
+    driver.yButton.onTrue(new GetTagPose(m_cams));
+    
 
     
 
