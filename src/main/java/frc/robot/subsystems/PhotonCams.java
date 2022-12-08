@@ -24,9 +24,9 @@ public class PhotonCams extends SubsystemBase{
     // Tag Id being tested
     private static int targetTag = 3;
     // the position of the camera relative to the the robot's center of rotatation.
-    private static Transform2d robotToCam = new Transform2d(new Translation2d(Units.inchesToMeters(10), Units.inchesToMeters(5)), new Rotation2d(270.0));
+    private static Transform2d robotToCam = new Transform2d(new Translation2d(Units.inchesToMeters(10), Units.inchesToMeters(5)), new Rotation2d(Units.degreesToRadians(-90)));
     // position of the goal, relative to the target Tag
-    private static Pose2d tagToGoal = new Pose2d(-1, 0, new Rotation2d(180));
+    private static Pose2d tagToGoal = new Pose2d(1, 0, new Rotation2d(Units.degreesToRadians(180)));
     // Transform2d object, or vector, used to derive the position that the robot must go to. 
     private Transform2d transform;
     // the location of the tag, relative to the location of the robot.
