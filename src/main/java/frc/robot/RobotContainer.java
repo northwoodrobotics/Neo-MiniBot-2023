@@ -84,7 +84,7 @@ public class RobotContainer {
    */
   //public Pose2d TagPose;
 
-  //public static PathPlannerTrajectory TargetTrajectory;
+  public static PathPlannerTrajectory TargetTrajectory;
 
  
   /**
