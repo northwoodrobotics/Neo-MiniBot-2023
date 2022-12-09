@@ -10,8 +10,11 @@ import com.pathplanner.lib.PathPoint;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -24,15 +27,17 @@ public class PhotonCams extends SubsystemBase{
     // Tag Id being tested
     private static int targetTag = 3;
     // the position of the camera relative to the the robot's center of rotatation.
-    private static Transform2d robotToCam = new Transform2d(new Translation2d(Units.inchesToMeters(10), Units.inchesToMeters(5)), new Rotation2d(Units.degreesToRadians(-90)));
+    private static Transform3d robotToCam = new Transform3d(new Translation3d(Units.inchesToMeters(10), Units.inchesToMeters(5),Units.inchesToMeters(6.5)), new Rotation3d(0, 0, Units.degreesToRadians(270)));
     // position of the goal, relative to the target Tag
-    private static Pose2d tagToGoal = new Pose2d(1, 0, new Rotation2d(Units.degreesToRadians(180)));
+    private static Transform3d tagToGoal = new Transform3d(new Translation3d(-1, 0, Units.inchesToMeters(22)), new Rotation3d());
     // Transform2d object, or vector, used to derive the position that the robot must go to. 
     private Transform2d transform;
     // the location of the tag, relative to the location of the robot.
     private Pose2d tagLocation = new Pose2d();
     //
     private PathPlannerTrajectory Route2Tag;
+
+    private Pose3d robot3D;
     
     private Pose2d TagPose;
 
@@ -51,6 +56,7 @@ public class PhotonCams extends SubsystemBase{
     }
     // returns the position of the tag, relative to the robot
     public Pose2d getTagLocation(Pose2d robotPose){
+         robot3D = new Pose3d(robotPose.getX(), robotPose.getY(), 0, new Rotation3d(0, 0, robotPose.getRotation().getRadians()))  ;
         //gets latest data from camera
         var res = visionCam.getLatestResult();
         // checks if the camera has a target
@@ -61,20 +67,18 @@ public class PhotonCams extends SubsystemBase{
                 // calculates location to drive to
                 var camToTarget = res.getBestTarget().getBestCameraToTarget();
                 // translate 3d vector to 2d vector
-                 transform = new Transform2d(
-                    new Translation2d(camToTarget.getTranslation().toTranslation2d().getX(), camToTarget.getTranslation().toTranslation2d().getY()), 
-                    new Rotation2d(-camToTarget.getRotation().toRotation2d().getDegrees()));
+              
                     // translates robot position to camera position
-                var cameraPose = robotPose.transformBy(robotToCam.inverse());
+                var cameraPose = robot3D.transformBy(robotToCam.inverse());
             
                 //calculates target position
-                Pose2d TargetPose = cameraPose.transformBy(transform);
+                Pose3d TargetPose = cameraPose.transformBy(camToTarget);
                 
                 // sets internal location to the calculated location which is 1m in front of the tag position
-                tagLocation = TargetPose.relativeTo(tagToGoal);
+                tagLocation = TargetPose.transformBy(tagToGoal).toPose2d();
                 
                 // spits out target location, which is 1m in front of the tag position
-                return TargetPose.relativeTo(tagToGoal);
+                return TargetPose.transformBy(tagToGoal).toPose2d();
                
 
             }else // if the tag is not the correct one, then spit out the last known location
