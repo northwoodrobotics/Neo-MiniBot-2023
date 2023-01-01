@@ -96,12 +96,12 @@ public class RobotContainer {
     camera = new PhotonCamera("gloworm");
     m_cams = new PhotonCams(camera);
     TagPose = new Pose2d();
-    PortForwarder.add(5800, "glowworm.local", 5800);
+    PortForwarder.add(5800, "gloworm.local", 5800);
     
 
     m_SwerveSubsystem.setDefaultCommand(new TeleopDriveCommand(m_SwerveSubsystem,
-        () -> yLimiter.calculate(driver.leftStick.getY()),
         () -> xLimiter.calculate(driver.leftStick.getX()),
+        () -> yLimiter.calculate(driver.leftStick.getY()),
         () -> -driver.rightStick.getX() * Constants.DriveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC));
 
         ShowInputs();
@@ -125,8 +125,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     driver.aButton.whileTrue(new CalibrateGyro(m_SwerveSubsystem));
-    driver.bButton.whileTrue(new SequentialCommandGroup(new DriveToTag(m_SwerveSubsystem, m_cams), new AutoDrive(m_SwerveSubsystem, TargetTrajectory)));
-
+    driver.bButton.whileTrue(new DriveToTag(m_SwerveSubsystem, m_cams));
+    driver.xButton.onTrue(new GetTagPose(m_cams));
     
 
   }

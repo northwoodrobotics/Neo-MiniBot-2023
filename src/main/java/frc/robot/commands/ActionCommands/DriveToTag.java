@@ -50,13 +50,11 @@ public class DriveToTag extends CommandBase{
 
     @Override
     public void execute(){
-        RobotContainer.TargetTrajectory = Route2Tag;
+        m_Swerve.dt.goToPose(Route2Tag.getEndState());
       
     }
-    @Override 
-    public boolean isFinished(){
-     return    posetimer.hasElapsed(0.25);
-    }
+
+
     @Override
     public void end(boolean interrupted){
         

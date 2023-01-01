@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 import edu.wpi.first.math.numbers.N5;
 import edu.wpi.first.math.numbers.N7;
 import edu.wpi.first.math.Nat;
@@ -64,7 +66,7 @@ public class SwerveDrivetrainModel {
         new PIDController(
             SwerveConstants.THETACONTROLLERkP, 0, 0);
 
-    HolonomicDriveController m_holo;
+    PPHolonomicDriveController m_holo;
 
 
 
@@ -144,7 +146,7 @@ public class SwerveDrivetrainModel {
         orientationChooser.addOption("Robot Oriented", "Robot Oriented");
         SmartDashboard.putData("Orientation Chooser", orientationChooser);
 
-       
+       m_holo = new PPHolonomicDriveController(SwerveConstants.XPIDCONTROLLER, SwerveConstants.YPIDCONTROLLER, thetaController);
     }
 
     /**
@@ -404,6 +406,10 @@ public class SwerveDrivetrainModel {
                 commandStates -> this.states = commandStates,
                 m_drive);
         return swerveControllerCommand.andThen(() -> setModuleStates(new SwerveInput(0,0,0)));
+    }
+    public void goToPose(PathPlannerState pose){
+        setModuleStates(m_holo.calculate(getPose(), pose));
+
     }
 
     public ArrayList<SwerveModule> getRealModules() {

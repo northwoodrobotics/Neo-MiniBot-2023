@@ -18,7 +18,13 @@ import org.littletonrobotics.junction.Logger;
 public class SwerveSubsystem extends SubsystemBase {
   private SwerveModuleState[] states;
   private SwerveModulePosition[] positions;
-  private swerveModuleIOInputsAutoLogged[] inputs;
+  private swerveModuleIOInputsAutoLogged[] inputs = new swerveModuleIOInputsAutoLogged[]{
+    new swerveModuleIOInputsAutoLogged(), 
+    new swerveModuleIOInputsAutoLogged(), 
+    new swerveModuleIOInputsAutoLogged(), 
+    new swerveModuleIOInputsAutoLogged(),
+  };
+  
  
   private ArrayList<SwerveModule> modules = new ArrayList<SwerveModule>(QuadSwerveSim.NUM_MODULES);
   public SwerveDrivetrainModel dt;
@@ -26,7 +32,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveSubsystem(SwerveDrivetrainModel dt) {
     this.dt = dt;
     modules = dt.getRealModules();
-  }
+  }  
 
   @Override
   public void periodic() {
@@ -62,7 +68,11 @@ public class SwerveSubsystem extends SubsystemBase {
       
       
       );
-     
+      
+      for (int i = 0; i<4; i++){
+        modules.get(i).updateInputs(inputs[i]);
+        Logger.getInstance().processInputs("DriveModule"+Integer.toString(i), inputs[i]);
+      }
 
     }
 
