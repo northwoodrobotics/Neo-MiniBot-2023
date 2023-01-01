@@ -46,7 +46,7 @@ public class DrivetrainSubsystem {
 
                 SwerveModule m_frontLeftModule = Mk4SwerveModuleHelper.createNeo(
                                 // This parameter is optional, but will allow you to see the current state of
-                                // the module on the dashboard.
+                                // the module on the dashboard.         
                                 tab.getLayout("Front Left Module", BuiltInLayouts.kList)
                                                 .withSize(2, 4)
                                                 .withPosition(0, 0),

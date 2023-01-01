@@ -31,6 +31,8 @@ public class DriveToTag extends CommandBase{
     }
     @Override
     public void initialize(){
+        posetimer.reset();
+        posetimer.start();
         // gets location of the target relative to the robot's internal position
         TagPose = m_Cameras.getTagLocation(m_Swerve.dt.getPose());
 

@@ -17,10 +17,12 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.net.PortForwarder;
 import frc.ExternalLib.SpectrumLib.gamepads.SpectrumXbox;
 import frc.ExternalLib.SpectrumLib.gamepads.mapping.ExpCurve;
 import frc.robot.commands.ActionCommands.DriveToTag;
+import frc.robot.commands.AutoCommands.SquiglyPath;
 import frc.robot.commands.DriveCommands.AutoDrive;
 import frc.robot.commands.DriveCommands.CalibrateGyro;
 import frc.robot.commands.DriveCommands.TeleopDriveCommand;
@@ -138,7 +140,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return new SquiglyPath(m_SwerveSubsystem);
   }
 
   public static double getDriveY() {
@@ -155,7 +157,7 @@ public class RobotContainer {
     return value;
   }
   public void ShowInputs(){
-    master.addNumber("TagID", ()-> m_cams.getTagID());
+    //master.addNumber("TagID", ()-> m_cams.getTagID());
     master.addNumber("X Command", ()-> -xLimiter.calculate(driver.leftStick.getX())*Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
     master.addNumber("Y Command", () -> -yLimiter.calculate(driver.leftStick.getY()) * Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
     master.addNumber("X Old Command", ()-> -getDriveX()*Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS* Constants.DriveConstants.MAX_FWD_REV_SPEED_MPS);
@@ -170,9 +172,9 @@ public class RobotContainer {
     master.addNumber("PoseX", ()-> m_SwerveSubsystem.dt.getPose().getX());
     master.addNumber("PoseY", ()-> m_SwerveSubsystem.dt.getPose().getY());
     master.addNumber("PoseRotation", ()-> m_SwerveSubsystem.dt.getPose().getRotation().getDegrees());
-    master.addNumber("TagX", ()-> m_cams.getTagLocation(m_SwerveSubsystem.dt.getPose()).getX());
-    master.addNumber("Tagy", ()-> m_cams.getTagLocation(m_SwerveSubsystem.dt.getPose()).getY());
-    master.addBoolean("hasTag", ()->m_cams.hasTargets());
+    //master.addNumber("TagX", ()-> m_cams.getTagLocation(m_SwerveSubsystem.dt.getPose()).getX());
+    //master.addNumber("Tagy", ()-> m_cams.getTagLocation(m_SwerveSubsystem.dt.getPose()).getY());
+    //master.addBoolean("hasTag", ()->m_cams.hasTargets());
    
 
     
