@@ -54,7 +54,7 @@ public class SwerveDrivetrainModel {
     Pose2d endPose;
     PoseTelemetry dtPoseView;
 
-    SwerveDrivePoseEstimator<N7, N7, N5> m_poseEstimator;
+    SwerveDrivePoseEstimator m_poseEstimator;
     Pose2d curEstPose = new Pose2d(SwerveConstants.DFLT_START_POSE.getTranslation(), SwerveConstants.DFLT_START_POSE.getRotation());
     Pose2d fieldPose = new Pose2d(); // Field-referenced orign
     boolean pointedDownfield = false;
@@ -114,7 +114,7 @@ public class SwerveDrivetrainModel {
         // Trustworthiness of the internal model of how motors should be moving
         // Measured in expected standard deviation (meters of position and degrees of
         // rotation)
-        var stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(0.5),0.05, 0.05, 0.05, 0.05);
+        var stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(0.5));
 
         // Trustworthiness of gyro in radians of standard deviation.
         var localMeasurementStdDevs = VecBuilder.fill(Units.degreesToRadians(0.1),0.01,0.01,0.01,0.01);
@@ -125,16 +125,12 @@ public class SwerveDrivetrainModel {
         var visionMeasurementStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(0.1));
 
         m_poseEstimator = 
-        new SwerveDrivePoseEstimator<N7,N7,N5>(
-            Nat.N7(), 
-            Nat.N7(), 
-            Nat.N5(),
+        new SwerveDrivePoseEstimator(
+            SwerveConstants.KINEMATICS, 
             getGyroscopeRotation(), 
             positions,
             SwerveConstants.DFLT_START_POSE,
-            SwerveConstants.KINEMATICS, 
             stateStdDevs, 
-            localMeasurementStdDevs, 
             visionMeasurementStdDevs);
 
         setKnownPose(SwerveConstants.DFLT_START_POSE);
