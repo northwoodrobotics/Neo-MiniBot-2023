@@ -30,17 +30,15 @@ public class PhotonCams extends SubsystemBase{
     private static Transform3d robotToCam = new Transform3d(new Translation3d(Units.inchesToMeters(10), Units.inchesToMeters(5),Units.inchesToMeters(6.5)), new Rotation3d(0, 0, Units.degreesToRadians(270)));
     // position of the goal, relative to the target Tag
     private static Transform3d tagToGoal = new Transform3d(new Translation3d(-1, 0, Units.inchesToMeters(22)), new Rotation3d());
-    // Transform2d object, or vector, used to derive the position that the robot must go to. 
-    private Transform2d transform;
     // the location of the tag, relative to the location of the robot.
     private Pose2d tagLocation = new Pose2d();
-    //
+    // Derived Path to Tag
     private PathPlannerTrajectory Route2Tag;
-
+    // 3d Pose of robot, Constructed from 2d Odometry Pose
     private Pose3d robot3D;
-    
+    // internal Pose object for Path Generation
     private Pose2d TagPose;
-
+    // Vector to Tag
     private Transform2d robotToTag;
 
     public PhotonCams(PhotonCamera camera){
@@ -64,11 +62,10 @@ public class PhotonCams extends SubsystemBase{
             var targetOpt = res.getBestTarget().getFiducialId();
             // checks if the the tag is Tag 3
             if(targetOpt == targetTag){
-                // calculates location to drive to
+                // grabs best camera data.
                 var camToTarget = res.getBestTarget().getBestCameraToTarget();
-                // translate 3d vector to 2d vector
               
-                    // translates robot position to camera position
+                // translates robot position to camera position
                 var cameraPose = robot3D.transformBy(robotToCam.inverse());
             
                 //calculates target position
@@ -91,7 +88,7 @@ public class PhotonCams extends SubsystemBase{
     public PathPlannerTrajectory calculateTrajectorToTag(Pose2d RobotPose){
         TagPose = getTagLocation(RobotPose);
 
-        // calculates a 2d vector in between the two tags
+        // calculates a 2d vector in between the robot and Tag
         robotToTag = new Transform2d(RobotPose, TagPose);
 
         // feeds all data into path generation software

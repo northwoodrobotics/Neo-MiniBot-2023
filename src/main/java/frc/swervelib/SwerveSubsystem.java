@@ -64,6 +64,8 @@ public class SwerveSubsystem extends SubsystemBase {
       
       );
       
+      dt.m_tracker.update(dt.getGyroscopeRotation(), dt.gyro.getAccelerlationArray());
+      
       for (int i = 0; i<4; i++){
         modules.get(i).updateInputs(inputs[i]);
         Logger.getInstance().processInputs("DriveModule"+Integer.toString(i), inputs[i]);

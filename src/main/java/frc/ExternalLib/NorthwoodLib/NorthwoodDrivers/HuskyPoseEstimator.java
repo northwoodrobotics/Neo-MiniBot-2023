@@ -24,7 +24,7 @@ import java.util.function.BiConsumer;
 
 /**
  * This class wraps an {@link UnscentedKalmanFilter Unscented Kalman Filter} to fuse
- * latency-compensated vision measurements with swerve drive encoder velocity measurements. It will
+ * latency-compensated vision measurements with swerve drive encoder velocity and position measurements. It will
  * correct for noisy measurements and encoder drift. It is intended to be an easy but more accurate
  * drop-in for {@link edu.wpi.first.math.kinematics.SwerveDriveOdometry}.
  *
@@ -33,13 +33,13 @@ import java.util.function.BiConsumer;
  * must be equal to the module count + 3. {@link Num Inputs} must be equal to the module count + 3.
  * {@link Num Outputs} must be equal to the module count + 1.
  *
- * <p>{@link SwerveDrivePoseEstimator#update} should be called every robot loop. If your loops are
+ * <p>{@link HuskyPoseEstimator#update} should be called every robot loop. If your loops are
  * faster or slower than the default of 20 ms, then you should change the nominal delta time using
  * the secondary constructor: {@link SwerveDrivePoseEstimator#SwerveDrivePoseEstimator(Nat, Nat,
  * Nat, Rotation2d, SwerveModulePosition[], Pose2d, SwerveDriveKinematics, Matrix, Matrix, Matrix,
  * double)}.
  *
- * <p>{@link SwerveDrivePoseEstimator#addVisionMeasurement} can be called as infrequently as you
+ * <p>{@link HuskyPoseEstimator#addVisionMeasurement} can be called as infrequently as you
  * want; if you never call it, then this class will behave mostly like regular encoder odometry.
  *
  * <p>The state-space system used internally has the following states (x), inputs (u), and outputs
@@ -292,7 +292,7 @@ public class HuskyPoseEstimator<States extends Num, Inputs extends Num, Outputs 
    * estimate while still accounting for measurement noise.
    *
    * <p>This method can be called as infrequently as you want, as long as you are calling {@link
-   * SwerveDrivePoseEstimator#update} every loop.
+   * HuskyPoseEstimator#update} every loop.
    *
    * <p>To promote stability of the pose estimate and make it robust to bad vision data, we
    * recommend only adding vision measurements that are already within one meter or so of the
@@ -300,7 +300,7 @@ public class HuskyPoseEstimator<States extends Num, Inputs extends Num, Outputs 
    *
    * @param visionRobotPoseMeters The pose of the robot as measured by the vision camera.
    * @param timestampSeconds The timestamp of the vision measurement in seconds. Note that if you
-   *     don't use your own time source by calling {@link SwerveDrivePoseEstimator#updateWithTime}
+   *     don't use your own time source by calling {@link HuskyPoseEstimator#updateWithTime}
    *     then you must use a timestamp with an epoch since FPGA startup (i.e. the epoch of this
    *     timestamp is the same epoch as Timer.getFPGATimestamp.) This means that you should use
    *     Timer.getFPGATimestamp as your time source or sync the epochs.
@@ -320,7 +320,7 @@ public class HuskyPoseEstimator<States extends Num, Inputs extends Num, Outputs 
    * estimate while still accounting for measurement noise.
    *
    * <p>This method can be called as infrequently as you want, as long as you are calling {@link
-   * SwerveDrivePoseEstimator#update} every loop.
+   * HuskyPoseEstimator#update} every loop.
    *
    * <p>To promote stability of the pose estimate and make it robust to bad vision data, we
    * recommend only adding vision measurements that are already within one meter or so of the
