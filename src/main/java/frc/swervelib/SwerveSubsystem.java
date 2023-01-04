@@ -53,15 +53,20 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
       dt.m_poseEstimator.update(dt.getGyroscopeRotation(), 
-
+      new SwerveModuleState[]{
+        states[0], 
+        states[1], 
+        states[2], 
+        states[3],
+      },
       new SwerveModulePosition[]{
         positions[0],
         positions[1],
         positions[2],
         positions[3]  
       }
-      
-      
+
+
       );
       
       dt.m_tracker.update(dt.getGyroscopeRotation(), dt.gyro.getAccelerlationArray());
