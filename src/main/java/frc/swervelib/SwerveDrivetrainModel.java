@@ -28,8 +28,10 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.GyroTracker;
 import frc.wpiClasses.QuadSwerveSim;
 import frc.wpiClasses.SwerveModuleSim;
+import frc.ExternalLib.NorthwoodLib.Math.FieldRelativeVelocity;
 
 public class SwerveDrivetrainModel {
 
@@ -55,6 +57,7 @@ public class SwerveDrivetrainModel {
     PoseTelemetry dtPoseView;
 
     SwerveDrivePoseEstimator m_poseEstimator;
+    GyroTracker m_tracker;
     Pose2d curEstPose = new Pose2d(SwerveConstants.DFLT_START_POSE.getTranslation(), SwerveConstants.DFLT_START_POSE.getRotation());
     Pose2d fieldPose = new Pose2d(); // Field-referenced orign
     boolean pointedDownfield = false;
@@ -143,6 +146,7 @@ public class SwerveDrivetrainModel {
         SmartDashboard.putData("Orientation Chooser", orientationChooser);
 
        m_holo = new PPHolonomicDriveController(SwerveConstants.XPIDCONTROLLER, SwerveConstants.YPIDCONTROLLER, thetaController);
+       m_tracker = new GyroTracker(getGyroscopeRotation(), SwerveConstants.DFLT_START_POSE);
     }
 
     /**
@@ -328,26 +332,26 @@ public class SwerveDrivetrainModel {
         return  SwerveConstants.KINEMATICS.toChassisSpeeds(states[0], states[1],states[2], states[3]);
     }
 
-    public ChassisSpeeds getFieldRelativeSpeeds(){    
-        return getChassisSpeed();
+    public FieldRelativeVelocity getFieldRelativeSpeeds(){    
+        return new FieldRelativeVelocity(getChassisSpeed(), getGyroscopeRotation());
            
       }
     public ChassisSpeeds getFieldReltaiveAcceleration(){
         double lastTime = Timer.getFPGATimestamp(); 
-        ChassisSpeeds PreviousSpeeds = getFieldRelativeSpeeds(); 
+        FieldRelativeVelocity PreviousSpeeds = getFieldRelativeSpeeds(); 
         return new ChassisSpeeds(
-            (getFieldRelativeSpeeds().vxMetersPerSecond-PreviousSpeeds.vxMetersPerSecond)/Timer.getFPGATimestamp()-lastTime, 
-            (getFieldRelativeSpeeds().vyMetersPerSecond-PreviousSpeeds.vyMetersPerSecond)/Timer.getFPGATimestamp()-lastTime,
-            (getFieldRelativeSpeeds().omegaRadiansPerSecond -PreviousSpeeds.omegaRadiansPerSecond)/Timer.getFPGATimestamp()-lastTime
+            (getFieldRelativeSpeeds().vx-PreviousSpeeds.vx)/Timer.getFPGATimestamp()-lastTime, 
+            (getFieldRelativeSpeeds().vy-PreviousSpeeds.vy)/Timer.getFPGATimestamp()-lastTime,
+            (getFieldRelativeSpeeds().omega -PreviousSpeeds.omega)/Timer.getFPGATimestamp()-lastTime
         );
     }
     public ChassisSpeeds getFieldRelativeJerk(){
         double lastTime = Timer.getFPGATimestamp(); 
         ChassisSpeeds PreviousSpeeds = getFieldReltaiveAcceleration(); 
         return new ChassisSpeeds(
-            (getFieldReltaiveAcceleration().vxMetersPerSecond-PreviousSpeeds.vxMetersPerSecond)/Timer.getFPGATimestamp()-lastTime, 
-            (getFieldReltaiveAcceleration().vyMetersPerSecond-PreviousSpeeds.vyMetersPerSecond)/Timer.getFPGATimestamp()-lastTime,
-            (getFieldReltaiveAcceleration().omegaRadiansPerSecond -PreviousSpeeds.omegaRadiansPerSecond)/Timer.getFPGATimestamp()-lastTime
+            (getFieldReltaiveAcceleration().vxMetersPerSecond-(PreviousSpeeds.vxMetersPerSecond)/Timer.getFPGATimestamp()-lastTime), 
+            (getFieldReltaiveAcceleration().vyMetersPerSecond-(PreviousSpeeds.vyMetersPerSecond)/Timer.getFPGATimestamp()-lastTime),
+            (getFieldReltaiveAcceleration().omegaRadiansPerSecond -(PreviousSpeeds.omegaRadiansPerSecond)/Timer.getFPGATimestamp()-lastTime)
         );
     }
       
@@ -358,6 +362,9 @@ public class SwerveDrivetrainModel {
     }
     public void plusNinetyGyroscope() {
         gyro.zeroGyroscope(90.0);
+    }
+    public Pose2d gyroPose(){
+        return m_tracker.getPoseMeters();
     }
 
     public Rotation2d getGyroscopeRotation() {
