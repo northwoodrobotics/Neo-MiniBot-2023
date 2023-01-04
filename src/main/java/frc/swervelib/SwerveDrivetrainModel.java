@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.GyroTracker;
+import frc.ExternalLib.NorthwoodLib.NorthwoodDrivers.HuskyPoseEstimator;
 import frc.wpiClasses.QuadSwerveSim;
 import frc.wpiClasses.SwerveModuleSim;
 import frc.ExternalLib.NorthwoodLib.Math.FieldRelativeVelocity;
@@ -56,7 +57,7 @@ public class SwerveDrivetrainModel {
     Pose2d endPose;
     PoseTelemetry dtPoseView;
 
-    SwerveDrivePoseEstimator m_poseEstimator;
+    HuskyPoseEstimator<N7, N7, N5> m_poseEstimator;
     GyroTracker m_tracker;
     Pose2d curEstPose = new Pose2d(SwerveConstants.DFLT_START_POSE.getTranslation(), SwerveConstants.DFLT_START_POSE.getRotation());
     Pose2d fieldPose = new Pose2d(); // Field-referenced orign
@@ -117,7 +118,7 @@ public class SwerveDrivetrainModel {
         // Trustworthiness of the internal model of how motors should be moving
         // Measured in expected standard deviation (meters of position and degrees of
         // rotation)
-        var stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(0.5));
+        var stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(0.5),0.05, 0.05, 0.05, 0.05);
 
         // Trustworthiness of gyro in radians of standard deviation.
         var localMeasurementStdDevs = VecBuilder.fill(Units.degreesToRadians(0.1),0.01,0.01,0.01,0.01);
@@ -128,17 +129,21 @@ public class SwerveDrivetrainModel {
         var visionMeasurementStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(0.1));
 
         m_poseEstimator = 
-        new SwerveDrivePoseEstimator(
-            SwerveConstants.KINEMATICS, 
+        new HuskyPoseEstimator<N7,N7,N5>(
+            Nat.N7(), 
+            Nat.N7(), 
+            Nat.N5(),
             getGyroscopeRotation(), 
             positions,
             SwerveConstants.DFLT_START_POSE,
+            SwerveConstants.KINEMATICS, 
             stateStdDevs, 
+            localMeasurementStdDevs, 
             visionMeasurementStdDevs);
 
         setKnownPose(SwerveConstants.DFLT_START_POSE);
 
-        dtPoseView = new PoseTelemetry(swerveDt, m_poseEstimator);
+        //dtPoseView = new PoseTelemetry(swerveDt, m_poseEstimator);
 
         // Control Orientation Chooser
         orientationChooser.setDefaultOption("Field Oriented", "Field Oriented");
