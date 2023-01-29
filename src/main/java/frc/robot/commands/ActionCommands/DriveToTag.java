@@ -34,7 +34,7 @@ public class DriveToTag extends CommandBase{
         posetimer.reset();
         posetimer.start();
         // gets location of the target relative to the robot's internal position
-        TagPose = m_Cameras.getTagLocation(m_Swerve.dt.getPose());
+      
 
         // calculates a 2d vector in between the two tags
         robotToTag = new Transform2d(m_Swerve.dt.getPose(), TagPose);

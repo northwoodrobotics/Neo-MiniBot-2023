@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.swervelib.*;
+import frc.swervelib.AbsoluteEncoder;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 

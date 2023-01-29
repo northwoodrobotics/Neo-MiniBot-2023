@@ -376,6 +376,7 @@ public class HuskyPoseEstimator<States extends Num, Inputs extends Num, Outputs 
    * @param modulePositions The current distance measurements and rotations of the swerve modules.
    * @return The estimated pose of the robot in meters.
    */
+  
   public Pose2d updateWithTime(
       double currentTimeSeconds,
       Rotation2d gyroAngle,
